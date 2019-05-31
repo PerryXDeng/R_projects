@@ -48,8 +48,8 @@ filter_by_version_ratings <- function(dataframe) {
 save_filtered_datasets <- function(){
   # saves the filtered datasets so we can play with them in rattle
   appstore <- load_data()
-  filtered_tot <- filter_by_total_ratings(applestore)
-  filtered_ver <- filter_by_version_ratings(applestore)
+  filtered_tot <- filter_by_total_ratings(appstore)
+  filtered_ver <- filter_by_version_ratings(appstore)
   write.csv(filtered_tot, file=FILTERED_CLT_TOTAL_FILEPATH)
   write.csv(filtered_ver, file=FILTERED_CLT_VERSION_FILEPATH)
 }
