@@ -5,6 +5,7 @@ library("gplots")
 #library(corrplot, quietly=TRUE)
 # grouping
 library(dplyr)
+library(magrittr)
 
 DATA_DIR = "./1/datasets/"
 FILEPATH = paste(DATA_DIR, "AppleStore.csv", sep="")
@@ -50,8 +51,8 @@ save_filtered_datasets <- function(){
   appstore <- load_data()
   filtered_tot <- filter_by_total_ratings(appstore)
   filtered_ver <- filter_by_version_ratings(appstore)
-  write.csv(filtered_tot, file=FILTERED_CLT_TOTAL_FILEPATH)
-  write.csv(filtered_ver, file=FILTERED_CLT_VERSION_FILEPATH)
+  write_csv(filtered_tot, FILTERED_CLT_TOTAL_FILEPATH)
+  write_csv(filtered_ver, FILTERED_CLT_VERSION_FILEPATH)
 }
 
 sam_exploration <- function() {
@@ -83,8 +84,32 @@ sam_exploration <- function() {
   plot(variance, 2)
 }
 
+plot_overlapping_density <- function(df){
+  # Use ggplot2 to generate density for user_rating, grouped by genres
+  
+  # Generate the plot.
+  p01 <-
+    dplyr::mutate(df, prime_genre=as.factor(prime_genre)) %>%
+    dplyr::select(user_rating, prime_genre) %>%
+    ggplot2::ggplot(ggplot2::aes(x=user_rating, color=type, fill=type)) +
+    ggplot2::geom_density(alpha=0.2) +
+    ggplot2::scale_x_continuous(limits=c(min(df$prime_genre), max(df$prime_genre)), name='User Rating') +
+    ggplot2::scale_fill_discrete(name='Prime Genre', labels=df$prime_genre) +
+    ggplot2::scale_color_discrete(name='Prime Genre', labels=df$prime_genre)
+    # rattle generated code which is not very customizable
+    # ggplot2::ggplot(ggplot2::aes(x=user_rating)) +
+    # ggplot2::geom_density(lty=3) + # dashed line for the overall population
+    # ggplot2::geom_density(ggplot2::aes(fill=prime_genre, colour=prime_genre), alpha=0.55) + # different subpopulations
+    # ggplot2::ggtitle("Distribution of Average User Ratings by Primary Genres") +
+    # ggplot2::labs(fill="prime_genre", y="Density")
+  # Display the plots.
+  p01
+}
+
 main <- function(variables) {
-  #save_filtered_datasets()
+  # save_filtered_datasets()
+  dataframe <- read_csv(FILTERED_CLT_TOTAL_FILEPATH)
+  plot_overlapping_density(dataframe)
 }
 
 main()
