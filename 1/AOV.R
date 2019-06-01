@@ -55,19 +55,19 @@ save_filtered_datasets <- function(){
   write_csv(filtered_ver, FILTERED_CLT_VERSION_FILEPATH)
 }
 
+summary_by_genre <- function(df){
+  # gets the size, mean, and standard deviation of each group
+  return(summarise(group_by(df, prime_genre), count = n(), 
+                   mean = mean(user_rating, na.rm = TRUE), sd = sd(user_rating, na.rm = TRUE)))
+}
+
 sam_exploration <- function() {
   # Sam's initial exploration
   # visualization of data and analysis of variance
   applestore <- load_data()
   filtered_tot <- filter_by_total_ratings(applestore)
   # app_correlation <- cor(applestore, use="pairwise", method="pearson")
-  # the %>% is a piping operator
-  group_by(filtered_tot, prime_genre)%>%
-    summarise(
-      count = n(),
-      mean = mean(user_rating, na.rm = TRUE),
-      sd = sd(user_rating, na.rm = TRUE)
-    )
+  summary_by_genre(filtered_tot)
   # Visualize the data
   boxplot(user_rating ~ prime_genre, data = filtered_tot,
           xlab = "Genre", ylab = "Rating",
@@ -84,32 +84,38 @@ sam_exploration <- function() {
   plot(variance, 2)
 }
 
-plot_overlapping_density <- function(df){
+plot_overlapping_density <- function(df, bandwidth="nrd0"){
   # Use ggplot2 to generate density for user_rating, grouped by genres
-  
+  # nrd0 is the default bandwidth selector - see Silverman (1986, page 48, eqn (3.31))
   # Generate the plot.
+  if (bandwidth == "nrd0"){
+    title <- paste("Distribution of Average User Ratings by Primary Genres,", "Default Bandwidth (Silverman 1986)")
+  }else{
+    title <- paste("Distribution of Average User Ratings by Primary Genres, Bandwidth =", bandwidth)
+  }
   p01 <-
     dplyr::mutate(df, prime_genre=as.factor(prime_genre)) %>%
     dplyr::select(user_rating, prime_genre) %>%
-    ggplot2::ggplot(ggplot2::aes(x=user_rating, color=type, fill=type)) +
-    ggplot2::geom_density(alpha=0.2) +
-    ggplot2::scale_x_continuous(limits=c(min(df$prime_genre), max(df$prime_genre)), name='User Rating') +
-    ggplot2::scale_fill_discrete(name='Prime Genre', labels=df$prime_genre) +
-    ggplot2::scale_color_discrete(name='Prime Genre', labels=df$prime_genre)
-    # rattle generated code which is not very customizable
-    # ggplot2::ggplot(ggplot2::aes(x=user_rating)) +
-    # ggplot2::geom_density(lty=3) + # dashed line for the overall population
-    # ggplot2::geom_density(ggplot2::aes(fill=prime_genre, colour=prime_genre), alpha=0.55) + # different subpopulations
-    # ggplot2::ggtitle("Distribution of Average User Ratings by Primary Genres") +
-    # ggplot2::labs(fill="prime_genre", y="Density")
+    # rattle generated code, cant customize legend and x axis names
+    ggplot2::ggplot(ggplot2::aes(x=user_rating)) +
+    # dashed line for the overall population
+    ggplot2::geom_density(lty=3, bw=bandwidth) +
+    # different subpopulations
+    ggplot2::geom_density(ggplot2::aes(fill=prime_genre, colour=prime_genre), alpha=0.2, bw=bandwidth) +
+    ggplot2::ggtitle(title) +
+    ggplot2::labs(fill="prime_genre", y="Density")
   # Display the plots.
-  p01
+  plot(p01)
 }
 
 main <- function(variables) {
+  # sam_exploration()
   # save_filtered_datasets()
+  
   dataframe <- read_csv(FILTERED_CLT_TOTAL_FILEPATH)
-  plot_overlapping_density(dataframe)
+  View(summary_by_genre(dataframe))
+  # plot_overlapping_density(dataframe)
+  # plot_overlapping_density(dataframe, bandwidth=0.25)
 }
 
 main()
