@@ -7,7 +7,8 @@ library("gplots")
 library(dplyr)
 library(magrittr)
 
-DATA_DIR = "./1/datasets/"
+HW_DIR = "./1/"
+DATA_DIR = paste(HW_DIR, "datasets/", sep="")
 FILEPATH = paste(DATA_DIR, "AppleStore.csv", sep="")
 FILTERED_CLT_TOTAL_FILEPATH = paste(DATA_DIR, "FilteredByTotalRatingsCLT.csv", sep="")
 FILTERED_CLT_VERSION_FILEPATH = paste(DATA_DIR, "FilteredByVersionRatingsCLT.csv", sep="")
@@ -59,6 +60,11 @@ summary_by_genre <- function(df){
   # gets the size, mean, and standard deviation of each group
   return(summarise(group_by(df, prime_genre), count = n(), 
                    mean = mean(user_rating, na.rm = TRUE), sd = sd(user_rating, na.rm = TRUE)))
+}
+
+save_genre_summary <- function(df){
+  stats = summary_by_genre(df)
+  write_csv(stats, paste(HW_DIR, "genre_stats.csv", sep=""))
 }
 
 sam_exploration <- function() {
@@ -113,9 +119,9 @@ main <- function(variables) {
   # save_filtered_datasets()
   
   dataframe <- read_csv(FILTERED_CLT_TOTAL_FILEPATH)
-  View(summary_by_genre(dataframe))
   # plot_overlapping_density(dataframe)
   # plot_overlapping_density(dataframe, bandwidth=0.25)
+  # save_genre_summary(dataframe)
 }
 
 main()
