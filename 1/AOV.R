@@ -1,4 +1,5 @@
 library(readr)
+library(ggplot2)
 # plotmeans
 library("gplots")
 # for plotting correlation
@@ -7,7 +8,7 @@ library("gplots")
 library(dplyr)
 library(magrittr)
 
-HW_DIR = "./1/"
+HW_DIR = "./csci620_big_data_homework/1/"
 DATA_DIR = paste(HW_DIR, "datasets/", sep="")
 FILEPATH = paste(DATA_DIR, "AppleStore.csv", sep="")
 FILTERED_CLT_TOTAL_FILEPATH = paste(DATA_DIR, "FilteredByTotalRatingsCLT.csv", sep="")
@@ -131,15 +132,52 @@ plot_ratings_histograms_by_groups <- function(df){
   }
 }
 
+drew_fun_with_languages <- function() {
+  applestore <- load_data()
+  p1 <- ggplot(applestore, aes(y = user_rating, x = lang.num)) + 
+    geom_point(shape=1) + 
+    geom_smooth(method=lm) +
+    ggtitle("User Rating vs # of Languages")
+  plot(p1)
+  print(paste("User Rating vs # of Languages Correlation: ", cor(applestore$user_rating, applestore$lang.num)))
+  
+  p2 <- ggplot(applestore, aes(y = rating_count_tot, x = lang.num)) + 
+    geom_point(shape=1) + 
+    geom_smooth(method=lm) +
+    ggtitle("Rating Count vs # of Languages")
+  plot(p2)
+  print(paste("Rating Count vs # of Languages Correlation: ", cor(applestore$rating_count_tot, applestore$lang.num)))
+
+  p3 <- ggplot(applestore, aes(y = user_rating_ver, x = lang.num)) +
+    ggtitle("User Rating this Version vs # of Languages") + 
+    geom_point(shape=1) + 
+    geom_smooth(method=lm) 
+  plot(p3)
+  print(paste("User Rating this Version vs # of Languages Correlation: ", cor(applestore$rating_count_tot, applestore$lang.num)))
+  
+  p4 <- ggplot(applestore, aes(y = rating_count_ver, x = lang.num)) + 
+    geom_point(shape=1) + 
+    geom_smooth(method=lm) +
+    ggtitle("Rating Count this Version vs # of Languages")
+  plot(p4)
+  print(paste("Rating Count this Version vs # of Languages Correlation: ", cor(applestore$rating_count_tot, applestore$lang.num)))
+  
+  
+}
+
 main <- function(variables) {
   # sam_exploration()
   # save_filtered_datasets()
   
-  dataframe <- read_csv(FILTERED_CLT_TOTAL_FILEPATH)
-  plot_ratings_histograms_by_groups(dataframe)
+  # dataframe <- read_csv(FILTERED_CLT_TOTAL_FILEPATH)
+  # plot_ratings_histograms_by_groups(dataframe)
   # plot_overlapping_ratings_density(dataframe)
   # plot_overlapping_ratings_density(dataframe, bandwidth=0.25)
   # save_genre_summary(dataframe)
+  
+  drew_fun_with_languages()
+  
+  
 }
 
 main()
