@@ -63,8 +63,8 @@ summary_by_genre <- function(df){
 }
 
 save_genre_summary <- function(df){
-  stats = summary_by_genre(df)
-  write_csv(stats, paste(HW_DIR, "genre_stats.csv", sep=""))
+  sdats = summary_by_genre(df)
+  write_csv(sdats, paste(HW_DIR, "genre_stats.csv", sep=""))
 }
 
 sam_exploration <- function() {
@@ -90,7 +90,7 @@ sam_exploration <- function() {
   plot(variance, 2)
 }
 
-plot_overlapping_density <- function(df, bandwidth="nrd0"){
+plot_overlapping_ratings_density <- function(df, bandwidth="nrd0"){
   # Use ggplot2 to generate density for user_rating, grouped by genres
   # nrd0 is the default bandwidth selector - see Silverman (1986, page 48, eqn (3.31))
   # Generate the plot.
@@ -114,13 +114,31 @@ plot_overlapping_density <- function(df, bandwidth="nrd0"){
   plot(p01)
 }
 
+plot_ratings_histograms_by_groups <- function(df){
+  subpopulations <- dplyr::select(dplyr::mutate(df, prime_genre=as.factor(prime_genre)), user_rating, prime_genre)
+  sdats <- dplyr::mutate(summary_by_genre(df), prime_genre)
+  for (i in 1:nrow(sdats)){
+    category <- sdats[i, 1]
+    n <- sdats[i, 2]
+    m <- sdats[i, 3]
+    sd <- sdats[i, 4]
+    subpopulation <- filter(subpopulations, prime_genre %in% category)
+    title <- sprintf("Distribution of Average User Ratings, %s, n = %s, m = %.2f, sd = %.2f", category, n, m, sd)
+    p <- ggplot2::ggplot(subpopulation, ggplot2::aes(x=user_rating)) +
+         ggplot2::scale_x_continuous(limits=c(1,5)) + 
+         ggplot2::geom_histogram(binwidth=0.25) + ggplot2::ggtitle(title)
+    plot(p)
+  }
+}
+
 main <- function(variables) {
   # sam_exploration()
   # save_filtered_datasets()
   
   dataframe <- read_csv(FILTERED_CLT_TOTAL_FILEPATH)
-  # plot_overlapping_density(dataframe)
-  # plot_overlapping_density(dataframe, bandwidth=0.25)
+  plot_ratings_histograms_by_groups(dataframe)
+  # plot_overlapping_ratings_density(dataframe)
+  # plot_overlapping_ratings_density(dataframe, bandwidth=0.25)
   # save_genre_summary(dataframe)
 }
 
