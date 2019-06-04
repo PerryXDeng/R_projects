@@ -176,7 +176,8 @@ main <- function(variables) {
   # save_filtered_datasets()
   
   dataframe <- read_csv(FILTERED_CLT_TOTAL_FILEPATH)
-  plot_ratings_distribution_histograms_by_groups(dataframe)
+  kruskal.test(user_rating ~ prime_genre, data = dataframe)
+  # plot_ratings_distribution_histograms_by_groups(dataframe)
   # plot_overlapping_ratings_density(dataframe)
   # plot_overlapping_ratings_density(dataframe, bandwidth=0.25)
   # save_genre_summary(dataframe)
