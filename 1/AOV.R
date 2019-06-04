@@ -64,7 +64,7 @@ summary_by_genre <- function(df){
                    count = n(), 
                    mean = mean(user_rating, na.rm = TRUE), 
                    sd = sd(user_rating, na.rm = TRUE),
-                   shapiro_p = shapiro.test(user_rating)[2]) # p value from normality test
+                   shapiro_p = shapiro.test(user_rating)[2])) # p value from normality test
 }
 
 save_genre_summary <- function(df){
@@ -132,7 +132,7 @@ plot_ratings_distribution_histograms_by_groups <- function(df){
     title <- sprintf("Distribution of Average User Ratings, %s, n = %s, m = %.2f, sd = %.2f, p < 0.01: %s", category, n, m, sd, p < 0.01)
     p <- ggplot2::ggplot(subpopulation, ggplot2::aes(x=user_rating)) +
          ggplot2::geom_histogram(ggplot2::aes(x=user_rating)) + 
-         ggplot2::ggtitle(title)
+         ggplot2::ggtitle(title) +
          ggplot2::scale_x_continuous(limits=c(1,5))
     plot(p)
   }
@@ -176,8 +176,8 @@ main <- function(variables) {
   # save_filtered_datasets()
   
   dataframe <- read_csv(FILTERED_CLT_TOTAL_FILEPATH)
-  kruskal.test(user_rating ~ prime_genre, data = dataframe)
-  # plot_ratings_distribution_histograms_by_groups(dataframe)
+  # ruskal.test(user_rating ~ prime_genre, data = dataframe)
+  plot_ratings_distribution_histograms_by_groups(dataframe)
   # plot_overlapping_ratings_density(dataframe)
   # plot_overlapping_ratings_density(dataframe, bandwidth=0.25)
   # save_genre_summary(dataframe)
