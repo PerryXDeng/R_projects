@@ -164,16 +164,30 @@ drew_fun_with_languages <- function() {
     geom_point(shape=1) + 
     geom_smooth(method=lm) 
   plot(p3)
-  print(paste("User Rating this Version vs # of Languages Correlation: ", cor(applestore$rating_count_tot, applestore$lang.num)))
+  print(paste("User Rating this Version vs # of Languages Correlation: ", cor(applestore$user_rating_ver, applestore$lang.num)))
   
   p4 <- ggplot(applestore, aes(y = rating_count_ver, x = lang.num)) + 
     geom_point(shape=1) + 
     geom_smooth(method=lm) +
     ggtitle("Rating Count this Version vs # of Languages")
   plot(p4)
-  print(paste("Rating Count this Version vs # of Languages Correlation: ", cor(applestore$rating_count_tot, applestore$lang.num)))
+  print(paste("Rating Count this Version vs # of Languages Correlation: ", cor(applestore$rating_count_ver, applestore$lang.num)))
   
   
+  applestore_grouped <- group_by(applestore, prime_genre)
+  
+  s <- dplyr::summarise(applestore_grouped, cor(user_rating, lang.num))
+  View(s)
+  write.table(s, paste(HW_DIR, "user_rating_lang_num.tsv"), sep="\t")
+  s <- dplyr::summarise(applestore_grouped, cor(rating_count_tot, lang.num))
+  View(s)
+  write.table(s, paste(HW_DIR, "rating_count_tot_lang_num.tsv"), sep="\t")
+  s <- dplyr::summarise(applestore_grouped, cor(user_rating_ver, lang.num))
+  View(s)
+  write.table(s, paste(HW_DIR, "user_rating_ver_lang_num.tsv"), sep="\t")
+  s <- dplyr::summarise(applestore_grouped, cor(rating_count_ver, lang.num))
+  View(s)
+  write.table(s, paste(HW_DIR, "rating_count_ver_lang_num.tsv"), sep="\t")
 }
 
 main <- function(variables) {
