@@ -8,7 +8,8 @@ library("gplots")
 library(dplyr)
 library(magrittr)
 
-HW_DIR = "./csci620_big_data_homework/1/"
+#HW_DIR = "./csci620_big_data_homework/1/"
+HW_DIR = "./1/"
 DATA_DIR = paste(HW_DIR, "datasets/", sep="")
 FILEPATH = paste(DATA_DIR, "AppleStore.csv", sep="")
 FILTERED_CLT_TOTAL_FILEPATH = paste(DATA_DIR, "FilteredByTotalRatingsCLT.csv", sep="")
@@ -59,8 +60,11 @@ save_filtered_datasets <- function(){
 
 summary_by_genre <- function(df){
   # gets the size, mean, and standard deviation of each group
-  return(summarise(group_by(df, prime_genre), count = n(), 
-                   mean = mean(user_rating, na.rm = TRUE), sd = sd(user_rating, na.rm = TRUE)))
+  return(summarise(group_by(df, prime_genre),
+                   count = n(), 
+                   mean = mean(user_rating, na.rm = TRUE), 
+                   sd = sd(user_rating, na.rm = TRUE),
+                   shapiro_p = shapiro.test(user_rating)[2])) # p value from normality test
 }
 
 save_genre_summary <- function(df){
@@ -115,7 +119,7 @@ plot_overlapping_ratings_density <- function(df, bandwidth="nrd0"){
   plot(p01)
 }
 
-plot_ratings_histograms_by_groups <- function(df){
+plot_ratings_distribution_histograms_by_groups <- function(df){
   subpopulations <- dplyr::select(dplyr::mutate(df, prime_genre=as.factor(prime_genre)), user_rating, prime_genre)
   sdats <- dplyr::mutate(summary_by_genre(df), prime_genre)
   for (i in 1:nrow(sdats)){
@@ -123,11 +127,13 @@ plot_ratings_histograms_by_groups <- function(df){
     n <- sdats[i, 2]
     m <- sdats[i, 3]
     sd <- sdats[i, 4]
+    p <- sdats[i, 5]
     subpopulation <- filter(subpopulations, prime_genre %in% category)
-    title <- sprintf("Distribution of Average User Ratings, %s, n = %s, m = %.2f, sd = %.2f", category, n, m, sd)
+    title <- sprintf("Distribution of Average User Ratings, %s, n = %s, m = %.2f, sd = %.2f, p < 0.01: %s", category, n, m, sd, p < 0.01)
     p <- ggplot2::ggplot(subpopulation, ggplot2::aes(x=user_rating)) +
-         ggplot2::scale_x_continuous(limits=c(1,5)) + 
-         ggplot2::geom_histogram(binwidth=0.25) + ggplot2::ggtitle(title)
+         ggplot2::geom_histogram(ggplot2::aes(x=user_rating)) + 
+         ggplot2::ggtitle(title) +
+         ggplot2::scale_x_continuous(limits=c(1,5))
     plot(p)
   }
 }
@@ -183,13 +189,14 @@ main <- function(variables) {
   # sam_exploration()
   # save_filtered_datasets()
   
-  # dataframe <- read_csv(FILTERED_CLT_TOTAL_FILEPATH)
-  # plot_ratings_histograms_by_groups(dataframe)
+  dataframe <- read_csv(FILTERED_CLT_TOTAL_FILEPATH)
+  # ruskal.test(user_rating ~ prime_genre, data = dataframe)
+  plot_ratings_distribution_histograms_by_groups(dataframe)
   # plot_overlapping_ratings_density(dataframe)
   # plot_overlapping_ratings_density(dataframe, bandwidth=0.25)
   # save_genre_summary(dataframe)
   
-  drew_fun_with_languages()
+  # drew_fun_with_languages()
   
   
 }
