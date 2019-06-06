@@ -129,7 +129,12 @@ plot_ratings_distribution_histograms_by_groups <- function(df){
     sd <- sdats[i, 4]
     p <- sdats[i, 5]
     subpopulation <- filter(subpopulations, prime_genre %in% category)
-    title <- sprintf("Distribution of Average User Ratings, %s, n = %s, m = %.2f, sd = %.2f, p < 0.01: %s", category, n, m, sd, p < 0.01)
+    if (p < 0.01){
+      signn <- '<'
+    }else{
+      signn <- '>'
+    }
+    title <- sprintf("Distribution of Average User Ratings, %s, n = %s, m = %.2f, sd = %.2f, p %s 0.01", category, n, m, sd, signn)
     p <- ggplot2::ggplot(subpopulation, ggplot2::aes(x=user_rating)) +
          ggplot2::geom_histogram(ggplot2::aes(x=user_rating)) + 
          ggplot2::ggtitle(title) +
