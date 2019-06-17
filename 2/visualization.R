@@ -1,5 +1,5 @@
 library(ggplot2)
-source("utility.R")
+source("./2/utility.R")
 
 
 time_series_scatterplots <- function(df, attribute_name, number_of_locations){
@@ -7,7 +7,7 @@ time_series_scatterplots <- function(df, attribute_name, number_of_locations){
   # each location is a series
   # randomly chooses number_of_locations areas from dataset
   df = df[sample(nrow(df), number_of_locations), ]
-  df = transposed_time_indexed_dataframe(df, attribute_name)
+  df = time_indexed_dataframe(df, attribute_name)
   p = ggplot(df, aes(x=date, y=attribute_name)) +
       geom_point(aes(color=location)) +
       geom_line(aes(color=location), size=1) +
