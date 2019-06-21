@@ -5,6 +5,7 @@ library(plotly)
 library(dplyr)
 library(textclean)
 library(stringi)
+library(webshot)
 
 ## Set up fake df_pop_county data frame
 ## df_pop_county <- data.frame(region=county.fips$fips)
@@ -32,8 +33,26 @@ create_heatmap <- function(combined_data){
   
   choropleth <- inner_join(county_df, county_data, by = "subregion")
   choropleth <- choropleth[!duplicated(choropleth$order), ]
+  
+  choropleth$INTERNATIONALMIGRATIO2010 <- choropleth$INTERNATIONALMIG2010 / choropleth$POPESTIMATE2010
+  choropleth$INTERNATIONALMIGRATIO2011 <- choropleth$INTERNATIONALMIG2011 / choropleth$POPESTIMATE2011
+  choropleth$INTERNATIONALMIGRATIO2012 <- choropleth$INTERNATIONALMIG2012 / choropleth$POPESTIMATE2012
+  choropleth$INTERNATIONALMIGRATIO2013 <- choropleth$INTERNATIONALMIG2013 / choropleth$POPESTIMATE2013
+  choropleth$INTERNATIONALMIGRATIO2014 <- choropleth$INTERNATIONALMIG2014 / choropleth$POPESTIMATE2014
+  choropleth$INTERNATIONALMIGRATIO2015 <- choropleth$INTERNATIONALMIG2015 / choropleth$POPESTIMATE2015
+  choropleth$INTERNATIONALMIGRATIO2016 <- choropleth$INTERNATIONALMIG2016 / choropleth$POPESTIMATE2016
+  choropleth$INTERNATIONALMIGRATIO2017 <- choropleth$INTERNATIONALMIG2017 / choropleth$POPESTIMATE2017
+  choropleth$INTERNATIONALMIGRATIO2018 <- choropleth$INTERNATIONALMIG2018 / choropleth$POPESTIMATE2018
 
-  plot_cols = list("INTERNATIONALMIG2014", "INTERNATIONALMIG2015", "INTERNATIONALMIG2016", "INTERNATIONALMIG2017", "INTERNATIONALMIG2018")
+  plot_cols = list("INTERNATIONALMIGRATIO2010", 
+                   "INTERNATIONALMIGRATIO2011", 
+                   "INTERNATIONALMIGRATIO2012", 
+                   "INTERNATIONALMIGRATIO2013", 
+                   "INTERNATIONALMIGRATIO2014", 
+                   "INTERNATIONALMIGRATIO2015", 
+                   "INTERNATIONALMIGRATIO2016", 
+                   "INTERNATIONALMIGRATIO2017", 
+                   "INTERNATIONALMIGRATIO2018")
   
   for(plot_col in plot_cols) {
     print(paste("PLOT_COL:", plot_col))
@@ -44,6 +63,7 @@ create_heatmap <- function(combined_data){
 }
 
 print_heatmap <- function(choropleth, state_df, col_string) {
+  png(paste(col_string, ".png"))
   p <- ggplot(choropleth, aes(long, lat, group = group)) +
     geom_polygon(aes_string(fill = col_string), 
                  colour = alpha("black", 1/2), size = 0.1)  +
@@ -62,20 +82,18 @@ print_heatmap <- function(choropleth, state_df, col_string) {
         x = 0.5,
         y = 1.01,
         xanchor = 'center'))
-  
-  # use style to modify layer
-  p <- style(p, hoverinfo = 'none', traces = c(3))
+
   
   # use plotly_build to modify layer
   p <- plotly_build(p)
   str(p$x$layout$annotations) # check annotations
   p$x$layout$annotations = NULL # remove annotation
   print(p)
+  dev.off()
 }
 
 main <- function(){
-  combined_data = load_combined_areas_data()
-  combined_data
+  combined_data = load_data()
   create_heatmap(combined_data)
 }
 
