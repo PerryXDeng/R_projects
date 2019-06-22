@@ -1,9 +1,16 @@
+#!/usr/bin/Rscript
 library(readr)
 library(tidyr)
 
 START_YEAR = 2010
 END_YEAR = 2017
 YEAR_SEQUENCE = seq(as.Date("2010/7/1"), as.Date("2017/7/1"), "years")
+
+NUM_STEPS = END_YEAR - START_YEAR + 1
+
+# for splitting the time series
+STEPS_PREDICTED = 3
+STEPS_SMOOTHED = END_YEAR - START_YEAR - STEPS_PREDICTED # first step isn't smoothed
 
 #HW_DIR <- "./"
 HW_DIR <- "./2/"
