@@ -18,7 +18,7 @@ time_series_scatterplots <- function(df, attribute_name, number_of_locations){
 }
 
 
-forecast_scatterplot <- function(original, smoothed, forecast, attribute_name, location){
+forecast_scatterplot <- function(original, smoothed, forecast, attribute_name, titl){
   # return the plot for the vector datapoints
   
   # there should be 2 times # of years of datapoints (one original, one smoothed and forecast)
@@ -40,6 +40,7 @@ forecast_scatterplot <- function(original, smoothed, forecast, attribute_name, l
     geom_line(aes(color=series), size=1) +
     ylab(attribute_name) +
     scale_x_date(breaks=YEAR_SEQUENCE) +
+    ggtitle(titl) +
     theme_minimal()
 
   return(p)
