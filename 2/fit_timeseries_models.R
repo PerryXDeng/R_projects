@@ -36,6 +36,7 @@ holt_on_all_locations <- function(mat, loc_names, attribute_name, typ="additive"
   names(metrics) = c("Smoothed MAPE", "Smoothed MPE", "Forecast MAPE", "Forecast MPE")
   plots = vector("list", ncol(mat))
   for (location_index in seq(1, ncol(mat))){
+  #for (location_index in seq(1, 5)){
   #foreach(location_index=seq(1, 2)) %dopar% {
     loc_name = loc_names[location_index]
     result = holt_on_location(mat, location_index, loc_name, attribute_name, typ, damp, a, b)
@@ -68,6 +69,7 @@ main <- function(){
     # randomly plots a few of them
     print(plots[rand])
   }
+  print(metrics)
 }
 
 if (sys.nframe() == 0) {
