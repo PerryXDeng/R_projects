@@ -1,0 +1,56 @@
+
+
+
+Linear Regression of Wage (y), Tenure, Urban Status, Years of Experience, Years of Education, Age
+
+Call:
+lm(formula = wage ~ tenure + urban + exper + educ + age, data = df)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-759.88 -239.59  -47.52  182.79 2178.83 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -597.664    150.154  -3.980 7.42e-05 ***
+tenure         7.893      2.479   3.183  0.00150 ** 
+urban        162.926     26.716   6.098 1.57e-09 ***
+exper         10.908      3.721   2.932  0.00346 ** 
+educ          68.535      6.395  10.716  < 2e-16 ***
+age           10.048      4.683   2.146  0.03215 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 366.5 on 929 degrees of freedom
+Multiple R-squared:  0.1829,	Adjusted R-squared:  0.1785 
+F-statistic: 41.58 on 5 and 929 DF,  p-value: < 2.2e-16
+
+
+
+
+Linear Regression of Wage (y), Tenure, Urban Status, Years of Experience, Years of Education (Factored by Urban Status), Age
+
+Call:
+lm(formula = wage ~ tenure + urban + exper + educ + age + I(educ * 
+    urban), data = df)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-789.22 -241.17  -44.42  179.40 2183.85 
+
+Coefficients:
+                Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     -365.996    188.209  -1.945  0.05212 .  
+tenure             7.721      2.477   3.118  0.00188 ** 
+urban           -169.577    165.508  -1.025  0.30582    
+exper             10.635      3.717   2.861  0.00432 ** 
+educ              50.166     11.054   4.538 6.42e-06 ***
+age               10.521      4.681   2.248  0.02483 *  
+I(educ * urban)   24.970     12.267   2.036  0.04208 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 365.9 on 928 degrees of freedom
+Multiple R-squared:  0.1865,	Adjusted R-squared:  0.1812 
+F-statistic: 35.46 on 6 and 928 DF,  p-value: < 2.2e-16
+

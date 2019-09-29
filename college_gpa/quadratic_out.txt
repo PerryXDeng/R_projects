@@ -1,0 +1,33 @@
+
+
+
+Quadratic Regression of College GPA (y), SAT, Athelete Status
+
+Call:
+lm(formula = colgpa ~ sat + I(sat^2) + athlete, data = df)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.86082 -0.38057  0.02303  0.42437  1.57832 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  2.613e+00  3.590e-01   7.279 4.00e-13 ***
+sat         -1.867e-03  6.921e-04  -2.697  0.00702 ** 
+I(sat^2)     1.820e-06  3.313e-07   5.494 4.17e-08 ***
+athlete     -1.008e-01  4.575e-02  -2.202  0.02769 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.5991 on 4133 degrees of freedom
+Multiple R-squared:  0.1733,	Adjusted R-squared:  0.1727 
+F-statistic: 288.9 on 3 and 4133 DF,  p-value: < 2.2e-16
+
+SAT Relationship Turning Point
+512.7812
+Proportion of Sample with SAT Greater than Turning Point
+0.9990331
+Mean SAT
+1030.331
+Quadratic GPA Gradient of SAT at Mean SAT
+0.001884164

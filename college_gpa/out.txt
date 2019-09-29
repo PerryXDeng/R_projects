@@ -1,0 +1,70 @@
+Select Statistics on College GPA and SAT Scores
+           colgpa       sat
+mean    2.6526855 1030.3312
+median  2.6600000 1030.0000
+std.dev 0.6586347  139.4014
+min     0.0000000  470.0000
+max     4.0000000 1540.0000
+nbr.na  0.0000000    0.0000
+
+
+
+Sample Mean College GPA, Athletes and Non-Athletes
+  athlete   colgpa
+1       0 2.666028
+2       1 2.381495
+
+
+
+Linear Regression of College GPA (y) and Athelete Status (x)
+
+Call:
+lm(formula = colgpa ~ athlete, data = df)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.66603 -0.43603  0.00397  0.46397  1.61851 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  2.66603    0.01045 255.212  < 2e-16 ***
+athlete     -0.28453    0.04824  -5.898 3.97e-09 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.656 on 4135 degrees of freedom
+Multiple R-squared:  0.008343,	Adjusted R-squared:  0.008104 
+F-statistic: 34.79 on 1 and 4135 DF,  p-value: 3.966e-09
+
+
+
+
+Sample Size of Non Athletes and Athletes
+3943 194
+
+
+Linear Regression of College GPA (y), Athelete Status (x1), SAT (x2)
+
+Call:
+lm(formula = colgpa ~ athlete + sat, data = df)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.84611 -0.38276  0.03056  0.42472  1.76647 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  6.801e-01  7.134e-02   9.533   <2e-16 ***
+athlete     -5.061e-02  4.499e-02  -1.125    0.261    
+sat          1.917e-03  6.823e-05  28.092   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.6012 on 4134 degrees of freedom
+Multiple R-squared:  0.1673,	Adjusted R-squared:  0.1669 
+F-statistic: 415.3 on 2 and 4134 DF,  p-value: < 2.2e-16
+
+Mean Residual
+-5.006608e-17
+Sample Covariance, Linear Regression Residual, SAT
+-3.89048e-14
